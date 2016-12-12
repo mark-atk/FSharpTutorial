@@ -7,10 +7,13 @@ type Details =
 type Item = 
   { Details: Details }
 
+type RoomId =
+  | RoomId of string
+
 type Exit =
-  | PassableExit of Details * Room
-  | LockedExit of Details * key: Item * next: Exit
-  | NoExit of Details option
+  | PassableExit of string * destination: RoomId
+  | LockedExit of string * key: Item * next: Exit
+  | NoExit of string option
 
 and Exits = 
   { North: Exit
@@ -23,11 +26,11 @@ and Room =
     Items: Item list
     Exits: Exits }
 
-let firstRoom =
-  { Details = { Name = "First Room"; Description="You are standing in a room"};
-    Items = [];
-    Exits = 
-    {   North = NoExit(None);
-        South = NoExit(None);
-        East = NoExit(None);
-        West = NoExit(None) }}
+type Player =
+  { Details: Details
+    Location: RoomId
+    Inventory: Item list }
+
+type World = 
+  { Rooms: Map<RoomId, Room>
+    Player: Player }
